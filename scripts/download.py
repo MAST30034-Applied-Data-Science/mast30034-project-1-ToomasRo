@@ -1,15 +1,16 @@
+from socket import if_nameindex
 from urllib.request import urlretrieve
 import os
 
 
-output_relative_dir = '../data/raw'
-target_dir = ''
-YEARS = ['2019', '2020']
-MONTHS = range(1, 2)
+output_relative_dir = '../data/raw/'
 
-for year in YEARS:
-    if not os.path.exists(output_relative_dir + target_dir + year):
-        os.makedirs(output_relative_dir + target_dir + year)
+YEARS = range(2017, 2020)
+MONTHS = range(6, 9)
+
+
+if not os.path.exists(output_relative_dir):
+    os.makedirs(output_relative_dir)
 
 URL_TEMPLATE = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_"#year-month.parquet
 
@@ -28,8 +29,9 @@ for year in YEARS:
         # generate output location and filename
         output_dir = f"{tlc_output_dir}/{year}_{month}.parquet"
         print(output_dir)
-        break
         # download
         urlretrieve(url, output_dir) 
-        
         print(f"Completed month {month}")
+
+print("Begin beach.csv")
+urlretrieve("https://data.cityofnewyork.us/api/views/fxgv-ba35/rows.csv?accessType=DOWNLOAD", f"{output_relative_dir}/beach.csv")
