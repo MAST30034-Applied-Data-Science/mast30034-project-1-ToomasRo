@@ -39,5 +39,21 @@ do_download(URL_TEMPLATE, '../data/raw/yellow', range(2017, 2020), range(6, 9))
 do_download(URL_TEMPLATE_GREEN, '../data/raw/green', range(2017, 2020), range(6, 9))
 do_download(URL_TEMPLATE_FHV, '../data/raw/fhv', range(2017, 2020), range(6, 9))
 
+
+
+WEATHER_TEMPLATE = 'https://www.ncei.noaa.gov/data/global-hourly/access/' #year/72503014732.csv
+WEATHER_DIR = '../data/raw/weather'
+def download_weather(dir, years):
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+    for year in years:
+        url = f'{WEATHER_TEMPLATE}{year}/72503014732.csv'
+        outputdir = f'{WEATHER_DIR}/{year}_weather.csv'
+        print(f"Downloading year:{year}")
+        urlretrieve(url, outputdir)
+
+
+download_weather(WEATHER_DIR, range(2017, 2020))
+
 #print("Begin beach.csv")
 #urlretrieve("https://data.cityofnewyork.us/api/views/fxgv-ba35/rows.csv?accessType=DOWNLOAD", f"{output_relative_dir}/beach.csv")
