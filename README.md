@@ -1,6 +1,6 @@
 # MAST30034 Project 1 README.md
-- Name: Test Student
-- Student ID: 0000000
+- Name: Toomas Roosma
+- Student ID: 1381691
 
 ## Student Instructions
 You **must** write up `README.md` for this repository to be eligable for readability marks.
@@ -21,12 +21,16 @@ Remember, we will be reading through and running your code, so it is in _your be
 ## README example
 This is an example `README.md` for students to use. **Please change this to your requirements**.
 
-**Research Goal:** My research goal is tip analysis for credit card payments
+**Research Goal:** My research goal is to predict the amount of trips starting in each of the New York city taxi zones.
 
-**Timeline:** The timeline for the research area is 2018 - 2021.
+**Timeline:** The timeline for the research goal is 2017 - 2019.
 
 To run the pipeline, please visit the `scripts` directory and run the files in order:
 1. `download.py`: This downloads the raw data into the `data/raw` directory.
 2. `preprocess.ipynb`: This notebook details all preprocessing steps and outputs it to the `data/curated` directory.
 3. `analysis.ipynb`: This notebook is used to conduct analysis on the curated data.
 4. `model.py` and `model_analysis.ipynb`: The script is used to run the model from CLI and the notebook is used for analysing and discussing the model.
+
+
+*TODO*
+1. Download shapefiles via download.py script to data folder
