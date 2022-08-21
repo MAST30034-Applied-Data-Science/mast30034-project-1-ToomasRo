@@ -40,7 +40,7 @@ Student ID: 1381691 \\
 \section{Introduction}
 % Link to a 30 min tutorial if you require revision: https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes
 In  New York City, the yellow taxicabs are a widely recognised symbols of the city. 
-With the arrival of ridesharing services as Uber and Lyft in [XXXdate][XXXsource], the Taxi and Limousine Commission (TLC) has been forced to adapt to the new 
+With the arrival of ridesharing services as Uber and Lyft in 2011 \cite{uberStartDate} and 2014 \cite{lyftStartDate} , the Taxi and Limousine Commission (TLC) has been forced to adapt to the new 
 gig economy [XXXsome source]. With the introduction of e-hailing apps and green taxis, TLC has already made steps to adapt. This report
 assumes the perspective of a taxi or rideshare company with the objective of forecasting demand for pickups in various locations around NYC.
 [method1] and [method2] will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, when to work and when not, giving better control over their work time. Yellow and green taxi data has been used, and they will be collectively referred to as taxi services.
@@ -72,7 +72,7 @@ Weather data from LaGuardia Airport recorded by the United States National Cente
 
 We are working on the assumption that people are more pepared for bad weather during winter months, so only data from summer months (XXX which ones) was used. Since 2017, the ride sharing companies Uber and Lyft have been required to share and publish drop-off date/time and locations \cite{tripUserGuide}. Both these companies have undeniably have aquired significant importance in the ride service providing scene in NYC, so data from 2017 and onwards was used. (XXXtodo visualise green, yellow, fhv usage in NYC).
 
-On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restriction put in place by NYC authorities. This means, that summer 2019 the last year included in this study. The world has since slowly gone back to normal, but as seen on model performance (XXX panna subsection 2022 discussion) of 2022, this return has not been completed. (XXXrääkida 2022). This range of 3 summers results in a dataset with N unique taxi trip entries. (XXXtodo leida mitu rida andmestikus on).
+On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restriction put in place by NYC authorities. This means, that summer 2019 the last year included in this study. The world has since slowly gone back to normal, but as seen on model performance (XXX panna subsection 2022 discussion) of 2022, this return has not been completed. (XXXrääkida 2022). After all the preprocessing, we were left with $271934805$ unique taxi trip entries.
 
 
 
@@ -94,7 +94,9 @@ The weather data recorded at the LaGuardia airport by the NCEI \cite{weatherData
 
 \textbf{Trips with distances over 6 hours} were discarded from the dataset. According to google maps, a trip between Totenville and Wakefield (extremities of area of study) would take only 2h during rush hours.
 
-\textbf{Trips with distances over XXX miles} were discarded from the dataset, as the the average trip length was XXX with a standard deviation of XXX. The same trip mentioned previously is 46 miles one way.
+\textbf{Trips with distances over 150 miles} were discarded from the dataset, as the the average trip length was 3 miles with a standard deviation of 7 miles. The same trip mentioned previously is 46 miles one way.
+
+\textbf{Trips with no passenger} data or zero passengers were removed.
 
 
 The following data was retained from the taxi dataset:
