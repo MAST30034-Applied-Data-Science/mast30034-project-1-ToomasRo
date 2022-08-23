@@ -39,11 +39,12 @@ Student ID: 1381691 \\
 
 \section{Introduction}
 % Link to a 30 min tutorial if you require revision: https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes
-In  New York City, the yellow taxicabs are a widely recognised symbols of the city. 
-With the arrival of ridesharing services as Uber and Lyft in 2011 \cite{uberStartDate} and 2014 \cite{lyftStartDate} , the Taxi and Limousine Commission (TLC) has been forced to adapt to the new 
+In  New York City, the yellow taxicabs are widely recognised symbols of the city. 
+With the arrival of ridesharing services such as Uber and Lyft in 2011 \cite{uberStartDate} and 2014 \cite{lyftStartDate}, the Taxi and Limousine Commission (TLC) has been forced to adapt to the new 
 gig economy. With the introduction of e-hailing apps and green taxis, TLC has already made steps to adapt. This report
 assumes the perspective of a taxi or rideshare company with the objective of forecasting demand for pickups in various locations around NYC.
-Linear regression will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, when to work and when not, giving better control over their work time. Yellow and green taxi data has been used, and they will be collectively referred to as taxi services.
+Linear regression will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, into when to work and when not, giving them better control over their work time. Yellow taxi and green taxi data have been used, and they will be collectively referred to as taxi services. For Hire Vehicles (FHV) are also included in this report, forming Mobility Services with taxis.
+
 
 
 \iffalse
@@ -73,7 +74,7 @@ Weather data from LaGuardia Airport recorded by the United States National Cente
 We are working on the assumption that people are more pepared for bad weather during winter months, so only data from summer months (june, july and august) was used. Since 2017, the ride sharing companies Uber and Lyft have been required to share and publish drop-off date/time and locations \cite{tripUserGuide}. Both these companies have undeniably have aquired significant importance in the ride service providing scene in NYC, so data from 2017 and onwards was used. 
 % (XXXtodo visualise green, yellow, fhv usage in NYC).
 
-On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restriction put in place by NYC authorities. This means, that summer 2019 the last year included in this study. The world has since slowly gone back to normal, but as seen on the overall model performance in 2021, this return has not been completed. To see how the model performed one year after the global pandemic started, see section \ref{discussion}. After all the preprocessing, we were left with $271934805$ unique taxi trip entries.
+On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restrictions put in place by NYC authorities. This means, that the summer of 2019 was the last year included in this study. The world has since slowly gone back to normal, but as seen in the overall model performance in 2021, this return has not been completed. To see how the model performed one year after the global pandemic started, see \autoref{discussion}. After all the preprocessing, we were left with $167935947$ unique taxi trip entries. [TODO 155\_330\_282]
 
 
 
@@ -121,19 +122,24 @@ And the following from the weather dataset:
 
 %[XXTODO] - vähemalt 1 good geospacial Visualisation
 
-\iffalse
-Example code for figures:
-% the [h] ensures your figure is inline at the location and not displayed on some other page
-\begin{figure}[h]
+\section{Modelling}
+A linear regression model was fitted with the mobility services data from previously selected temporal range. Location IDs were one-hot-encoded due to them being categorical attributes. Other attributes were normalised. Pickup datetimes were split into components, pickup month, pickup day, pickup day of the week and hour. Minutes and seconds were ignored.
+
+The model achieved an Root Mean Square Deviation of 227 and converged after 17 iterations. A better metric of the model accuracy would be the Mean Absolute Error (MAE), that was 152. This is a relatevly average performing model, as the standard deviation of pickups per zone per hour was 189.
+
+\subsection{Prediction and Error Analysis}
+
+\begin{figure}
     % change the scale multiplier to make the figures smaller or larger
-    \includegraphics[width=0.35\textwidth]{nyc_map.PNG}
+    \includegraphics[width=0.60\textwidth]{august2019pudiffmap.jpg}
     % this ensures your figures are centered where possible
     \centering
-    \caption{Some caption} % refer to this image as (Figure 1)
-\end{figure}
-\fi
+    \caption{Pick-up prediction error on August 17th, at 17:00 or maybe later} % refer to this image as (Figure 1)
+\end{figure}\label{fig:diffmap}
 
-\section{Modelling}
+As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, data, that the model did not have at it's disposition.
+
+
 
 \iffalse
     TODO:
@@ -149,6 +155,7 @@ Example code for figures:
 
 
 \section{Recommendations}
+As seen in Figure \autoref{fig:diffmap}, the location of yo mama
 
 
 \subsection{Discussion} \label{discussion}
