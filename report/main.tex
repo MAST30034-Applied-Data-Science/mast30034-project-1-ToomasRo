@@ -74,8 +74,7 @@ Weather data from LaGuardia Airport recorded by the United States National Cente
 We are working on the assumption that people are more prepared for bad weather during the winter months, so only data from summer months (June, July and August) was used. Since 2017, the ride-sharing companies Uber and Lyft have been required to share and publish drop-off date/time and locations \cite{tripUserGuide}. Both these companies have undeniably acquired significant importance in the ride service providing scene in NYC, so data from 2017 and onwards was used. 
 % (XXXtodo visualise green, yellow, fhv usage in NYC).
 
-On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restrictions put in place by NYC authorities. This means, that the summer of 2019 was the last year included in this study. The world has since slowly gone back to normal, but to avoid model bias data from 2021 onwards was omited. After all the preprocessing, we were left with $167935947$ unique taxi trip entries.
-
+On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restrictions put in place by NYC authorities. This means, that the summer of 2019 was the last year included in this study. The world has since slowly gone back to normal, but to avoid model bias data from 2021 onwards was omited. After all the preprocessing, we were left with $167\,935\,947$ unique taxi trip entries.
 
 
 \subsubsection{Feature selection}
@@ -86,22 +85,20 @@ The weather data recorded at the LaGuardia airport by the NCEI \cite{weatherData
 
 \subsubsection{Eliminating outliers}
 
+Numerous techniques were used to eliminate datapoints that were deemed outliers. Here are a few main criteras:
+
 % (XXTODO siia võiks leida ilusasti numbrid)
-
-\textbf{Trips with invalid pickup and drop-off location ID} were discarded from the dataset, as the shapefiles defined only location IDs in the range 1-263.
-
-\textbf{Trips with pickup date outside the defined range} were discarded. Drop-offs outside the selected range were left in because we are interested in predicting pickups.
-
-\textbf{Trips with negative duration} were detected and discarded.
-
-\textbf{Trips with distances over 6 hours} were discarded from the dataset. According to google maps, a trip between Tottenville and Wakefield (extremities of the area of study) would take only 2h during rush hours.
-
-\textbf{Trips with distances over 150 miles} were discarded from the dataset, as the average trip length was 3 miles with a standard deviation of 7 miles. The same trip mentioned previously is 46 miles one way.
-
-\textbf{Trips with no passenger} data or zero passengers were removed.
+\begin{itemize}
+    \item \textbf{Trips with invalid pickup and drop-off location ID} were discarded from the dataset, as the shapefiles defined only location IDs in the range 1-263.
+    \item \textbf{Trips with pickup date outside the defined range} were discarded. Drop-offs outside the selected range were left in because we are interested in predicting pickups.
+    \item \textbf{Trips with negative duration} were detected and discarded.
+    \item \textbf{Trips with distances over 6 hours} were discarded from the dataset. According to google maps, a trip between Tottenville and Wakefield (extremities of the area of study) would take only 2h during rush hours.
+    \item \textbf{Trips with distances over 150 miles} were discarded from the dataset, as the average trip length was 3 miles with a standard deviation of 7 miles. The same trip mentioned previously is 46 miles one way.
+    \item \textbf{Trips with no passenger} data or zero passengers were removed.
+\end{itemize}
 
 
-The following data was retained from the taxi dataset:
+One of the goal of this report was to include data from FHVs, so only the following data fields was retained from the mobility services dataset:
 
 \begin{tabular}{ l l l }
     \textbullet\ Month, day and hour & \textbullet\ Weekday & \textbullet\ Pickup location ID  
@@ -115,16 +112,16 @@ And the following from the weather dataset:
 \end{tabular}  
 
 %[XXTODO] - vähemalt 1 good geospacial Visualisation
+The trip amount stayed consistent througout the with a visible peak at the rush hour around 5-7 PM \autoref{fig:tripcountperhour}.
+
+\begin{figure}
+    \includegraphics[width=0.70\textwidth]{tripcount_hour_2.jpeg}
+    \centering
+    \caption{Total pickup count througout the day} \label{fig:tripcountperhour}
+\end{figure}
+
 
 \section{Modelling}
-
-
-\subsection{First iteration}
-A linear regression model was fitted with the mobility services data from the previously selected temporal range. Location IDs were one-hot-encoded due to them being categorical attributes. Other attributes were normalised. Pickup datetimes were split into components, pickup month, pickup day, pickup day of the week and hour. Minutes and seconds were ignored.
-
-The model achieved a Root Mean Square Deviation of 227 and converged after 17 iterations. A better metric of the model accuracy would be the Mean Absolute Error (MAE), which was 152. This model's performance was below expectations, as the standard deviation of pickups per zone per hour was 189. 
-
-\subsubsection{Prediction and Error Analysis}
 
 \begin{figure}
     \includegraphics[width=0.60\textwidth]{august2019pudiffmap.jpg}
@@ -132,22 +129,25 @@ The model achieved a Root Mean Square Deviation of 227 and converged after 17 it
     \caption{Pick-up prediction error on August 17th, at 17:00} \label{fig:diffmap}
 \end{figure}
 
+\subsection{First iteration}
+A linear regression model was fitted with the mobility services data from the previously selected temporal range. Location IDs were one-hot-encoded due to them being categorical attributes. Other attributes were normalised. Pickup datetimes were split into components, pickup month, pickup day, pickup day of the week and hour. Minutes and seconds were ignored.
+
+
+The model achieved a Root Mean Square Deviation of 227 and converged after 17 iterations. A better metric of the model accuracy would be the Mean Absolute Error (MAE), which was 152. This model's performance was below expectations, as the standard deviation of pickups per zone per hour was 189. 
+
+
+\subsubsection{Prediction and Error Analysis}
+
+
 As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map \cite{key} from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, data, that the model did not have at its disposal.
 
 \begin{figure}
-    \includegraphics[width=0.5\textwidth]{model1_error_hour.jpeg}
+    \includegraphics[width=0.70\textwidth]{model1_error_hour.jpeg}
     \centering
     \caption{Absolute error of predictions with respect to time} \label{fig:maemodel1}
 \end{figure}
 
 As seen on \autoref{fig:maemodel1}, the model accuracy is drastically lower during nighttime. For the next model iteration, only times between 5 AM and 10 PM will be kept, in order to help it. 
-
-
-\subsection{Second iteration}
-
-As seen on \autoref*{fig:maemodel1}, there are not many trips taken during night time, and that may hurt the model's performance. A second model was 
-
-
 
 
 
@@ -165,11 +165,10 @@ As seen on \autoref*{fig:maemodel1}, there are not many trips taken during night
 
 
 \section{Recommendations}
-As seen in Figure \autoref{fig:diffmap}
 
-It is recommended to look at the model with a 
-Before the model can unlock its true potential, an expert with New York knowledge should take a look at its predictions and XXX tell where they come from. 
+Before the model can unlock its true potential, an expert with New York knowledge should take a look at its predictions and give opinions on them. As seen in \autoref{fig:tripdist}, the trip distance also varies a lot depending on the time of the day.
 
+New York City's legislators could also push further laws to force ride-sharing companies to share more of their data. It is clear, that if we could use the number of users concurrently opening the application and actively looking for a ride, instead of using a proxy of pickups, accuracy could be improved.
 
 \subsection{Discussion} \label{discussion}
 
@@ -181,7 +180,6 @@ Before the model fullfills its second goal of giving the taxi drivers decision p
 
 Looking into the feasability of a neural network is also recommended. This project looked into it, but abbondoned the lead due to the high computational requirements of training such a model. It is highly probable that a (deep) neural network predicts the data better, as human reactions to weather can not be explained by mathematical formulas.
 
-New York City's legislators could also push further laws to force ride-sharing companies to share more of their data. It is clear, that if we could use the number of users concurrently opening the application and actively looking for a ride, instead of using a proxy of pickups, accuracy could be improved.
 
 
 \begin{figure}[h]
