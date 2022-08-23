@@ -24,7 +24,7 @@
 
 % Begin document creation
 % DELETE THE \lipsum PLACEHOLDERS WHEN YOU BEGIN
-\title{\textbf{Insert} \\ Insert Subtitle}
+\title{\textbf{Forecasting Demand for Taxis in New York City}}
 \author{
 Toomas Roosma \\
 Student ID: 1381691 \\
@@ -40,11 +40,11 @@ Student ID: 1381691 \\
 \section{Introduction}
 % Link to a 30 min tutorial if you require revision: https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes
 In  New York City, the yellow taxicabs are widely recognised symbols of the city. 
-With the arrival of ridesharing services such as Uber and Lyft in 2011 \cite{uberStartDate} and 2014 \cite{lyftStartDate}, the Taxi and Limousine Commission (TLC) has been forced to adapt to the new 
-gig economy. With the introduction of e-hailing apps and green taxis, TLC has already made steps to adapt. This report
-assumes the perspective of a taxi or rideshare company with the objective of forecasting demand for pickups in various locations around NYC.
-Linear regression will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, into when to work and when not, giving them better control over their work time. Yellow taxi and green taxi data have been used, and they will be collectively referred to as taxi services. For Hire Vehicles (FHV) are also included in this report, forming Mobility Services with taxis.
+With the arrival of ridesharing services such as Uber and Lyft in 2011 \cite{uberStartDate} and 2014 \cite{lyftStartDate}, the Taxi and Limousine Commission (TLC) has been forced to adapt to the new gig economy. With the introduction of e-hailing apps and green taxis, TLC has already made steps to adapt. 
 
+This report assumes the perspective of a taxi or rideshare company with the objective of forecasting demand for pickups in various locations around NYC.
+
+Linear regression will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, into when to work and when not, giving them better control over their work time. Yellow taxi and green taxi data have been used, and they will be collectively referred to as taxi services. Data from for Hire Vehicles (FHV) are also included in this report, forming Mobility Services with taxis. Weather data from the LaGuardia airport was included, as it influences heavily consumer's behaviour. 
 
 
 \iffalse
@@ -74,7 +74,7 @@ Weather data from LaGuardia Airport recorded by the United States National Cente
 We are working on the assumption that people are more prepared for bad weather during the winter months, so only data from summer months (June, July and August) was used. Since 2017, the ride-sharing companies Uber and Lyft have been required to share and publish drop-off date/time and locations \cite{tripUserGuide}. Both these companies have undeniably acquired significant importance in the ride service providing scene in NYC, so data from 2017 and onwards was used. 
 % (XXXtodo visualise green, yellow, fhv usage in NYC).
 
-On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restrictions put in place by NYC authorities. This means, that the summer of 2019 was the last year included in this study. The world has since slowly gone back to normal, but as seen in the overall model performance in 2021, this return has not been completed. To see how the model performed one year after the global pandemic started, see \autoref{discussion}. After all the preprocessing, we were left with $167935947$ unique taxi trip entries. [TODO 155\_330\_282]
+On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restrictions put in place by NYC authorities. This means, that the summer of 2019 was the last year included in this study. The world has since slowly gone back to normal, but to avoid model bias data from 2021 onwards was omited. After all the preprocessing, we were left with $167935947$ unique taxi trip entries.
 
 
 
@@ -118,6 +118,7 @@ And the following from the weather dataset:
 
 \section{Modelling}
 
+
 \subsection{First iteration}
 A linear regression model was fitted with the mobility services data from the previously selected temporal range. Location IDs were one-hot-encoded due to them being categorical attributes. Other attributes were normalised. Pickup datetimes were split into components, pickup month, pickup day, pickup day of the week and hour. Minutes and seconds were ignored.
 
@@ -128,21 +129,23 @@ The model achieved a Root Mean Square Deviation of 227 and converged after 17 it
 \begin{figure}
     \includegraphics[width=0.60\textwidth]{august2019pudiffmap.jpg}
     \centering
-    \caption{Pick-up prediction error on August 17th, at 17:00 or maybe later} 
-\end{figure}\label{fig:diffmap}
+    \caption{Pick-up prediction error on August 17th, at 17:00} \label{fig:diffmap}
+\end{figure}
 
-As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, data, that the model did not have at its disposal.
+As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map \cite{key} from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, data, that the model did not have at its disposal.
+
 \begin{figure}
     \includegraphics[width=0.5\textwidth]{model1_error_hour.jpeg}
     \centering
-    \caption{Absolute error of predictions with respect to time} 
-\end{figure}\label{fig:maemodel1}
+    \caption{Absolute error of predictions with respect to time} \label{fig:maemodel1}
+\end{figure}
+
 As seen on \autoref{fig:maemodel1}, the model accuracy is drastically lower during nighttime. For the next model iteration, only times between 5 AM and 10 PM will be kept, in order to help it. 
 
 
 \subsection{Second iteration}
 
-As seen on [TODO trip nr/time], there are not many trips taken during night time, and that may hurt the model's performance. A second model was 
+As seen on \autoref*{fig:maemodel1}, there are not many trips taken during night time, and that may hurt the model's performance. A second model was 
 
 
 
@@ -164,17 +167,29 @@ As seen on [TODO trip nr/time], there are not many trips taken during night time
 \section{Recommendations}
 As seen in Figure \autoref{fig:diffmap}
 
+It is recommended to look at the model with a 
+Before the model can unlock its true potential, an expert with New York knowledge should take a look at its predictions and XXX tell where they come from. 
+
 
 \subsection{Discussion} \label{discussion}
 
-The linear regression model performs surprisingly well, as the pickup number per hour per zone varies greatly (mean of 764 and standard deviation of 1024). The most appropriate metric to grade our model is Mean Absolute Error (MAE), because of how easy it is to interpret. Our model achieved an MAE of 123, with an $R^2$ of 0.49. This means, that on average the model predicts the demand better than humans.
+The linear regression model does not perform exepcionally well, but accounting for the fact that the pickup number per hour per zone varies greatly (mean of 764 and standard deviation of 1024 \footnote{Excluding zones and hours with zero trips}). The most appropriate metric to grade our model is Mean Absolute Error (MAE), because of how easy it is to interpret, especially to our target group. Our model achieved an MAE of 123, with an $R^2$ of 0.58.
+
+The NYCTLC has not yet published 2022 summer data on their website, so there it is not possible to evaluate the model's performance with current data. However, with more thoroughly cleaning and data preprocessing, a greater accuracy can be achieved. Normalisation did not have a big impact on models performance.
+
+Before the model fullfills its second goal of giving the taxi drivers decision power over their working times, a new metric should also be put into place, because demand is not the only metric for profitability. As seen on \autoref{fig:tripdist}, trip lengths vary greatly depending on the time of the day. This variance can not be explained by weather data only and needs an expert insight into NYC work culture.
+
+Looking into the feasability of a neural network is also recommended. This project looked into it, but abbondoned the lead due to the high computational requirements of training such a model. It is highly probable that a (deep) neural network predicts the data better, as human reactions to weather can not be explained by mathematical formulas.
+
+New York City's legislators could also push further laws to force ride-sharing companies to share more of their data. It is clear, that if we could use the number of users concurrently opening the application and actively looking for a ride, instead of using a proxy of pickups, accuracy could be improved.
+
 
 \begin{figure}[h]
     % change the scale multiplier to make the figures smaller or larger
-    \includegraphics[width=0.65\textwidth]{pickuptime_distance.jpeg}
+    \includegraphics[width=0.5\textwidth]{pickuptime_distance.jpeg}
     % this ensures your figures are centered where possible
     \centering
-    \caption{Some caption} % refer to this image as (Figure 1)
+    \caption{Trip distance over pickup time} \label{fig:tripdist}% refer to this image as (Figure 1)
 \end{figure}
 
 \iffalse
@@ -185,7 +200,7 @@ TODO:
 
 \section{Conclusion}
 
-This model proved itself interesting enough to pursue further research. However, due to the lack of sharing information from other ride-sharing companies like Uber, predicting the demand is limited to weather data. With data from them, more precise amounts of passengers could be estimated, which can also be used as a proxy for demand.
+This model proved itself interesting enough to pursue further research. However, due to the lack of sharing information from other ride-sharing companies like Uber, predicting the demand is limited to proxy data and weather data. With data from them, more precise amounts of passengers could be estimated, which can also be used as a proxy for demand.
 
 
 \clearpage
