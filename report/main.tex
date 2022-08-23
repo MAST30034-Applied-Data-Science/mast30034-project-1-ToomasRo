@@ -9,7 +9,7 @@
 \usepackage[none]{hyphenat}
 \usepackage{csquotes}
 
-\graphicspath{ {./plots/} }
+\graphicspath{ {../plots/} }
 
 \setlength\parindent{0pt}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,42 +102,49 @@ The weather data recorded at the LaGuardia airport by the NCEI \cite{weatherData
 
 
 The following data was retained from the taxi dataset:
-\begin{itemize}
-    \item Month, day and hour
-    \item Weekday
-    \item Pickup location ID
-\end{itemize}
+
+\begin{tabular}{ l l l }
+    \textbullet\ Month, day and hour & \textbullet\ Weekday & \textbullet\ Pickup location ID  
+\end{tabular}    
 
 And the following from the weather dataset:
-\begin{itemize}
-    \item Wind speed
-    \item Visibility
-    \item Air temperature
-    \item Dew point
-    \item Atmospheric pressure
-    \item Cloud coverage
-\end{itemize}
 
-
+\begin{tabular}{ l l l }
+    \textbullet\ Wind speed & \textbullet\ Visibility & \textbullet\ Air temperature  \\
+    \textbullet\ Dew point & \textbullet\ Atmospheric pressure & \textbullet\ Cloud coverage  
+\end{tabular}  
 
 %[XXTODO] - vähemalt 1 good geospacial Visualisation
 
 \section{Modelling}
+
+\subsection{First iteration}
 A linear regression model was fitted with the mobility services data from previously selected temporal range. Location IDs were one-hot-encoded due to them being categorical attributes. Other attributes were normalised. Pickup datetimes were split into components, pickup month, pickup day, pickup day of the week and hour. Minutes and seconds were ignored.
 
-The model achieved an Root Mean Square Deviation of 227 and converged after 17 iterations. A better metric of the model accuracy would be the Mean Absolute Error (MAE), that was 152. This is a relatevly average performing model, as the standard deviation of pickups per zone per hour was 189.
+The model achieved an Root Mean Square Deviation of 227 and converged after 17 iterations. A better metric of the model accuracy would be the Mean Absolute Error (MAE), that was 152. This model's performance was below expectances, as the standard deviation of pickups per zone per hour was 189. 
 
-\subsection{Prediction and Error Analysis}
+\subsubsection{Prediction and Error Analysis}
 
 \begin{figure}
-    % change the scale multiplier to make the figures smaller or larger
     \includegraphics[width=0.60\textwidth]{august2019pudiffmap.jpg}
-    % this ensures your figures are centered where possible
     \centering
-    \caption{Pick-up prediction error on August 17th, at 17:00 or maybe later} % refer to this image as (Figure 1)
+    \caption{Pick-up prediction error on August 17th, at 17:00 or maybe later} 
 \end{figure}\label{fig:diffmap}
 
 As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, data, that the model did not have at it's disposition.
+\begin{figure}
+    \includegraphics[width=0.5\textwidth]{model1_error_hour.jpeg}
+    \centering
+    \caption{Absolute error of predictions with respect to time} 
+\end{figure}\label{fig:maemodel1}
+As seen on \autoref{fig:maemodel1}, the model accuracy is drastically lower during night time. For the next model iteration, only times between 5AM and 22PM will be kept, in order to help it. 
+
+
+\subsection{Second iteration}
+
+As seen on [TODO trip nr/time], there are not many trips taken during night time, and that may hurt the model's performance. A second model was 
+
+
 
 
 
@@ -155,7 +162,7 @@ As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in
 
 
 \section{Recommendations}
-As seen in Figure \autoref{fig:diffmap}, the location of yo mama
+As seen in Figure \autoref{fig:diffmap}
 
 
 \subsection{Discussion} \label{discussion}
