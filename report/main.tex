@@ -44,7 +44,7 @@ With the arrival of ridesharing services such as Uber and Lyft in 2011 \cite{ube
 
 This report assumes the perspective of a taxi or rideshare company with the objective of forecasting demand for pickups in various locations around NYC.
 
-Linear regression will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, into when to work and when not, giving them better control over their work time. Yellow taxi and green taxi data have been used, and they will be collectively referred to as taxi services. Data from for Hire Vehicles (FHV) are also included in this report, forming Mobility Services with taxis. Weather data from the LaGuardia airport was included, as it influences heavily consumer's behaviour. 
+Linear regression will be used to predict demand, based on data provided by the TLC from 2017 to 2019. This project aims to be also beneficial for taxi drivers, giving them insights, into when to work and when not, giving them better control over their work time. Yellow taxi and green taxi data have been used, and they will be collectively referred to as taxi services. Data from For Hire Vehicles (FHV) are also included in this report, forming Mobility Services with taxis. Weather data from the LaGuardia airport was included, as it influences heavily consumer behaviour. 
 
 
 \iffalse
@@ -71,7 +71,7 @@ Weather data from LaGuardia Airport recorded by the United States National Cente
 
 \subsubsection{Dataset range selection}
 
-We are working on the assumption that people are more prepared for bad weather during the winter months, so only data from summer months (June, July and August) was used. Since 2017, the ride-sharing companies Uber and Lyft have been required to share and publish drop-off date/time and locations \cite{tripUserGuide}. Both these companies have undeniably acquired significant importance in the ride service providing scene in NYC, so data from 2017 and onwards was used. 
+We are working on the assumption that people are more prepared for bad weather during the winter months, so only data from the summer months (June, July and August) was used. Since 2017, the ride-sharing companies Uber and Lyft have been required to share and publish drop-off date/time and locations \cite{tripUserGuide}. Both these companies have undeniably acquired significant importance in the ride service providing scene in NYC, so data from 2017 and onwards was used. 
 % (XXXtodo visualise green, yellow, fhv usage in NYC).
 
 On the other end, data from 2020 and onwards was not used due to the lockdown and subsequent restrictions put in place by NYC authorities. This means, that the summer of 2019 was the last year included in this study. The world has since slowly gone back to normal, but to avoid model bias data from 2021 onwards was omited. After all the preprocessing, we were left with $167\,935\,947$ unique taxi trip entries.
@@ -85,7 +85,7 @@ The weather data recorded at the LaGuardia airport by the NCEI \cite{weatherData
 
 \subsubsection{Eliminating outliers}
 
-Numerous techniques were used to eliminate datapoints that were deemed outliers. Here are a few main criteras:
+Numerous techniques were used to eliminate data points that were deemed outliers. Here are a few main criteria:
 
 % (XXTODO siia võiks leida ilusasti numbrid)
 \begin{itemize}
@@ -98,7 +98,7 @@ Numerous techniques were used to eliminate datapoints that were deemed outliers.
 \end{itemize}
 
 
-One of the goal of this report was to include data from FHVs, so only the following data fields was retained from the mobility services dataset:
+One of the goals of this report was to include data from FHVs, so only the following data fields were retained from the mobility services dataset:
 
 \begin{tabular}{ l l l }
     \textbullet\ Month, day and hour & \textbullet\ Weekday & \textbullet\ Pickup location ID  
@@ -112,7 +112,7 @@ And the following from the weather dataset:
 \end{tabular}  
 
 %[XXTODO] - vähemalt 1 good geospacial Visualisation
-The trip amount stayed consistent througout the with a visible peak at the rush hour around 5-7 PM \autoref{fig:tripcountperhour}.
+The trip amount stayed consistent throughout the with a visible peak at the rush hour around 5-7 PM \autoref{fig:tripcountperhour}.
 
 \begin{figure}
     \includegraphics[width=0.70\textwidth]{tripcount_hour_2.jpeg}
@@ -139,7 +139,7 @@ The model achieved a Root Mean Square Deviation of 227 and converged after 17 it
 \subsubsection{Prediction and Error Analysis}
 
 
-As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map \cite{key} from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, data, that the model did not have at its disposal.
+As seen in \autoref{fig:diffmap}, the model tends to over estimate the demand in Manhattan, central Brooklyn and at the John F. Kennedy International Airport. Aprat from the airport, this prediction looks a lot like the population density map \cite{key} from 2010. The map showing the differences between actual demand and predicted demand is clipped at 300 for better viewing purposes. Over estimating the demand in the JFK airport area is expected, as the demand will highly depend on the number of inbound flights, and data, that the model did not have at its disposal.
 
 \begin{figure}
     \includegraphics[width=0.70\textwidth]{model1_error_hour.jpeg}
@@ -172,13 +172,13 @@ New York City's legislators could also push further laws to force ride-sharing c
 
 \subsection{Discussion} \label{discussion}
 
-The linear regression model does not perform exepcionally well, but accounting for the fact that the pickup number per hour per zone varies greatly (mean of 764 and standard deviation of 1024 \footnote{Excluding zones and hours with zero trips}). The most appropriate metric to grade our model is Mean Absolute Error (MAE), because of how easy it is to interpret, especially to our target group. Our model achieved an MAE of 123, with an $R^2$ of 0.58.
+The linear regression model does not perform exepcionally well, but accounting for the fact that the pickup number per hour per zone varies greatly (mean of 764 and standard deviation of 1024 \footnote{Excluding zones and hours with zero trips}). The most appropriate metric to grade our model is Mean Absolute Error (MAE), because of how easy it is to interpret, especially for our target group. Our model achieved an MAE of 123, with an $R^2$ of 0.58.
 
-The NYCTLC has not yet published 2022 summer data on their website, so there it is not possible to evaluate the model's performance with current data. However, with more thoroughly cleaning and data preprocessing, a greater accuracy can be achieved. Normalisation did not have a big impact on models performance.
+The NYCTLC has not yet published 2022 summer data on their website, so there it is not possible to evaluate the model's performance with current data. However, with a more thorough cleaning and data preprocessing, greater accuracy can be achieved. Normalisation did not have a big impact on model performance.
 
 Before the model fullfills its second goal of giving the taxi drivers decision power over their working times, a new metric should also be put into place, because demand is not the only metric for profitability. As seen on \autoref{fig:tripdist}, trip lengths vary greatly depending on the time of the day. This variance can not be explained by weather data only and needs an expert insight into NYC work culture.
 
-Looking into the feasability of a neural network is also recommended. This project looked into it, but abbondoned the lead due to the high computational requirements of training such a model. It is highly probable that a (deep) neural network predicts the data better, as human reactions to weather can not be explained by mathematical formulas.
+Looking into the feasability of a neural network is also recommended. This project looked into it but abandoned the lead due to the high computational requirements of training such a model. It is highly probable that a (deep) neural network predicts the data better, as human reactions to weather can not be explained by mathematical formulas.
 
 
 
